@@ -13,10 +13,55 @@ const colorStyles = (props) => {
         &:active {
             background: ${darken(0.1, color)};
         }
+        ${props.outline && css`
+            background: none;
+            border: 1px solid ${color};
+            color: ${color};
+            &:hover {
+                background: ${color};
+                color: #fff;
+            }
+            &:active {
+                background: ${darken(0.1, color)};
+            }
+        `}
     `;
 }
 
-// scss 문법 사용 가능
+const sizes = {
+    large: {
+        height: '3rem',
+        fontSize: '1.25rem'
+    },
+    medium: {
+        height: '2.25rem',
+        fontSize: '1rem'
+    },
+    small: {
+        height: '1.75rem',
+        fontSize: '0.875rem'
+    },
+}
+
+const sizeSyles = ({ size }) => {
+    return css`
+        height: ${sizes[size].height};
+        font-size: ${sizes[size].fontSize};
+    `;
+}
+
+const fullWidthStyles = css`
+    ${props => props.fullWidth && css`
+        width: 100%;
+        justify-content: center;
+        &:not(:first-child) {
+            margin-left: 0;
+            margin-top: 1rem;
+        }
+    `}
+`;
+
+
 const StyledButton = styled.button`
     display: inline-flex;
     justify-content: center;
@@ -32,20 +77,23 @@ const StyledButton = styled.button`
     height: 2.25rem;
     font-size: 1rem;
 
-    ${colorStyles}
-
-    & + & {
+    &:not(:first-child) {
         margin-left: 1rem;
     }
+    
+    ${colorStyles}
+    ${sizeSyles}
+    ${fullWidthStyles}
 `;
 
 
-function Button({ children, color, size, ...res }) {
-    return <StyledButton color={color} {...res}>{children}</StyledButton>
+function Button({ children, color, size, outline, fullWidth, ...res }) {
+    return <StyledButton color={color} size={size} outline={outline} fullWidth={fullWidth} {...res}>{children}</StyledButton>
 };
 
 Button.defaultProps = {
     color: 'green',
+    size: 'medium',
 }
 
 export default Button;
